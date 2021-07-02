@@ -18,7 +18,19 @@ public class StudentService {
     }
 
     public void addNewStudent(Student student){
-        System.out.println(student);
+        var studentOpetional = studentRepository.findStudentByEmail(student.getEmail());
+        if (studentOpetional.isPresent())
+            throw new IllegalStateException("Email has already been taken");
+
+        studentRepository.save(student);
+    }
+
+    public void deleteStudent(long id){
+        var exists = studentRepository.existsById(id);
+        if (!exists)
+            throw new IllegalStateException("student with id "+id+" does not exist.");
+        studentRepository.deleteById(id);
+
     }
 
 //    public Student getStudent(long id) throws Exception {
